@@ -8,76 +8,77 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0a0a0a; color: #fff; overflow-x: hidden;
+            overflow: hidden; background-color: #0a0a0a; color: #fff;
         }
 
-        #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        #vanta-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
 
         /* --- NAVIGATION --- */
         nav {
             position: fixed; top: 0; width: 100%; display: flex; justify-content: center; align-items: center; 
-            padding: 20px 0; z-index: 50;
-            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 20px 0; z-index: 50; box-sizing: border-box;
+            background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
-        .nav-links { display: flex; gap: 40px; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
         .nav-links a {
             color: #fff; text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 1px; 
             text-transform: uppercase; cursor: pointer; transition: color 0.3s;
         }
         .nav-links a:hover, .nav-links a.active-link { color: #4285F4; }
-        
+
         .mobile-menu-btn {
             display: none; background: none; border: none; color: white; cursor: pointer; z-index: 60;
         }
 
         /* --- MAIN CONTENT --- */
         .page-container {
-            position: relative; min-height: 100vh; width: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 1; pointer-events: none; padding-top: 80px; box-sizing: border-box;
+            z-index: 1; pointer-events: none;
         }
 
         .section {
             position: absolute; opacity: 0; transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
-            pointer-events: none; text-align: center; width: 90%; max-width: 900px;
+            pointer-events: none; text-align: center; width: 100%; max-width: 900px;
         }
-        .section.active { position: relative; opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .section.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
-        h1 { font-size: 3.5rem; font-weight: 600; margin: 0 0 10px 0; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
-        h2 { font-size: 2.5rem; font-weight: 600; margin-bottom: 30px; letter-spacing: -1px; color: #fff; }
-        p.subtitle { font-size: 1.2rem; color: #a1a1aa; line-height: 1.6; max-width: 600px; margin: 0 auto; }
+        h1 { font-size: 3.5rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        h2 { font-size: 2.5rem; font-weight: 600; margin-bottom: 40px; letter-spacing: -1px; color: #fff; }
+        p.subtitle { font-size: 1.2rem; color: #a1a1aa; line-height: 1.6; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; width: 100%; margin-top: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; align-items: stretch; }
         .grid a { display: block; text-decoration: none; color: inherit; height: 100%; }
         .card { 
-            background: rgba(255, 255, 255, 0.03); padding: 25px; border: 1px solid rgba(255,255,255,0.08); 
+            background: rgba(255, 255, 255, 0.03); padding: 30px; border: 1px solid rgba(255,255,255,0.08); 
             border-radius: 12px; backdrop-filter: blur(10px); text-align: left;
-            transition: transform 0.3s ease; height: 100%; box-sizing: border-box;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            height: 100%; box-sizing: border-box; display: flex; flex-direction: column;
         }
         .card:hover { transform: translateY(-5px); border-color: rgba(66, 133, 244, 0.5); }
-        .card h3 { margin: 0 0 10px 0; color: #4285F4; font-size: 1.2rem; }
-        .card p { margin: 0; font-size: 0.9rem; color: #a1a1aa; line-height: 1.5; }
+        .card h3 { margin: 0 0 10px 0; color: #4285F4; font-size: 1.3rem; }
+        .card p { margin: 0; font-size: 0.95rem; color: #a1a1aa; line-height: 1.5; }
         
+        /* Premium AI Chat Pill */
         #ai-chat-btn {
-            position: fixed; bottom: 20px; right: 20px; z-index: 100;
+            position: fixed; bottom: 30px; right: 30px; z-index: 100;
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px); padding: 12px 24px; border-radius: 30px;
-            display: flex; align-items: center; gap: 10px; cursor: pointer; color: #fff; font-size: 0.95rem; font-weight: 500;
-            transition: all 0.3s ease;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 12px 24px; border-radius: 30px;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            transition: all 0.3s ease; pointer-events: auto;
+            color: #a1a1aa; font-size: 0.95rem; font-weight: 500;
         }
-        #ai-chat-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(66, 133, 244, 0.5); transform: translateY(-3px); }
-
-        /* BRUTE FORCE KILLER FOR VOICEFLOW DEFAULT WIDGET */
-        .vfrc-launcher, .vfrc-widget--launcher, #vfrc-launcher { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+        #ai-chat-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; border-color: rgba(66, 133, 244, 0.5); transform: translateY(-3px); }
 
         /* --- APPLE-STYLE MOBILE LAYOUT --- */
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
             h2 { font-size: 1.8rem; }
-            p.subtitle { font-size: 1rem; }
+            p.subtitle { font-size: 1rem; padding: 0 15px; }
             .grid { grid-template-columns: 1fr; }
             .section { width: 90%; }
             
@@ -90,12 +91,13 @@
                 background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
                 flex-direction: column; align-items: center; justify-content: center;
                 gap: 35px; transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 40; opacity: 0;
+                z-index: 40; opacity: 0; pointer-events: none;
             }
-            .nav-links.open { transform: translateY(0); opacity: 1; }
+            .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
             .nav-links a { font-size: 1.5rem; font-weight: 600; }
             
-            #ai-chat-btn span { display: none; } /* Icon only on mobile */
+            /* Shrink AI button to icon-only on mobile */
+            #ai-chat-btn span { display: none; } 
             #ai-chat-btn { padding: 15px; border-radius: 50%; bottom: 20px; right: 20px; }
         }
     </style>
@@ -110,32 +112,44 @@
         </button>
         <div class="nav-links" id="nav-links">
             <a onclick="navigate('home')" class="nav-link active-link" id="link-home">Home</a>
-            <a onclick="navigate('projects')" class="nav-link" id="link-projects">Projects</a>
-            <a onclick="navigate('research')" class="nav-link" id="link-research">Research</a>
+            <a onclick="navigate('projects')" class="nav-link" id="link-projects">Featured Projects</a>
+            <a onclick="navigate('research')" class="nav-link" id="link-research">Publications</a>
             <a onclick="navigate('contact')" class="nav-link" id="link-contact">Contact</a>
-            </div>
+        </div>
     </nav>
 
     <div class="page-container">
         <div id="home" class="section active">
             <h1>Alfayez Ahmad</h1>
-            <p class="subtitle">CS Student @ Integral University | AI & Cloud Systems Developer</p>
+            <p class="subtitle">AI & Cloud Computing | Network Intrusion Detection & Autonomous Systems</p>
         </div>
 
         <div id="projects" class="section">
             <h2>Featured Projects</h2>
             <div class="grid">
                 <a href="https://github.com/alfayezahmad/Sentinela-AI-NIDS" target="_blank">
-                    <div class="card"><h3>Sentinela NIDS</h3><p>AI-powered intrusion detection.</p></div>
+                    <div class="card">
+                        <h3>Sentinela NIDS</h3>
+                        <p>AI-powered Network Intrusion Detection System implementation.</p>
+                    </div>
                 </a>
                 <a href="https://github.com/alfayezahmad/ideal-sniffle" target="_blank">
-                    <div class="card"><h3>Ideal-Sniffle</h3><p>Machine learning air quality forecaster.</p></div>
+                    <div class="card">
+                        <h3>Ideal-Sniffle</h3>
+                        <p>Machine learning air quality forecasting model tailored for Lucknow environmental data.</p>
+                    </div>
                 </a>
                 <a href="https://github.com/alfayezahmad/warehouse-vision-sam2" target="_blank">
-                    <div class="card"><h3>Warehouse Vision</h3><p>SAM2 autonomous tracking.</p></div>
+                    <div class="card">
+                        <h3>Warehouse Vision</h3>
+                        <p>Autonomous warehouse simulation utilizing SAM2 tracking.</p>
+                    </div>
                 </a>
                 <a href="https://github.com/alfayezahmad/Quadcopter-Sim-V1" target="_blank">
-                    <div class="card"><h3>Quadcopter Sim V1</h3><p>Modular UAV flight simulator stack.</p></div>
+                    <div class="card">
+                        <h3>Quadcopter Sim V1</h3>
+                        <p>Modular UAV flight simulator stack.</p>
+                    </div>
                 </a>
             </div>
         </div>
@@ -143,22 +157,32 @@
         <div id="research" class="section">
             <h2>Publications</h2>
             <div class="grid">
-                <div class="card"><h3>IEEE IMPACT 2026</h3><p>RL for Variable Speed Limit Systems.</p></div>
-                <div class="card"><h3>Bentham Science</h3><p>AI in Precision Medicine Book Chapter.</p></div>
+                <div class="card">
+                    <h3>IEEE Publication</h3>
+                    <p>Co-authored RL for Variable Speed Limit Systems.</p>
+                </div>
+                <div class="card">
+                    <h3>Bentham Science</h3>
+                    <p>Co-authored "AI in Precision Medicine" chapter.</p>
+                </div>
             </div>
         </div>
 
         <div id="contact" class="section">
             <h2>Get In Touch</h2>
-            <div class="card" style="max-width: 400px; margin: 0 auto; text-align: center;">
-                <p style="margin-bottom: 20px;">Open for collaborations on cloud infrastructure and AI systems.</p>
-                <a href="mailto:alfayezahmad.aa@gmail.com" style="display: inline-block; padding: 12px 24px; background: #4285F4; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600;">Email Me</a>
+            <div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+                <p style="margin-bottom: 25px;">Open to collaborations regarding cloud infrastructure and AI systems.</p>
+                <a href="mailto:alfayezahmad.aa@gmail.com" style="display: inline-block; padding: 12px 24px; background: #4285F4; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600;">Send an Email</a>
             </div>
         </div>
     </div>
 
     <div id="ai-chat-btn" onclick="window.voiceflow.chat.open()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <path d="M12 8v4"></path>
+            <path d="M12 16h.01"></path>
+        </svg>
         <span>Ask AI</span>
     </div>
 
@@ -167,49 +191,93 @@
     <script>
         VANTA.DOTS({
             el: "#vanta-bg",
-            mouseControls: true, touchControls: true, minHeight: 200.00, minWidth: 200.00,
-            color: 0x4285F4, color2: 0x1A73E8, backgroundColor: 0x0a0a0a, size: 3.00, spacing: 35.00
+            mouseControls: true, touchControls: true, gyroControls: false,
+            minHeight: 200.00, minWidth: 200.00, scale: 1.00, scaleMobile: 1.00,
+            color: 0x4285F4, color2: 0x1A73E8, backgroundColor: 0x0a0a0a,
+            size: 3.00, spacing: 35.00, showLines: false
         });
 
+        // Mobile Menu Toggle
         function toggleMenu() {
             document.getElementById('nav-links').classList.toggle('open');
         }
 
+        // Updated Navigation to auto-close menu on mobile
         function navigate(targetId) {
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-link'));
             document.getElementById(targetId).classList.add('active');
             document.getElementById('link-' + targetId).classList.add('active-link');
-            document.getElementById('nav-links').classList.remove('open'); // Auto-close mobile menu
+            
+            // Close mobile menu if open
+            document.getElementById('nav-links').classList.remove('open');
         }
     </script>
 
     <script type="text/javascript">
       const customTheme = `
-        .vfrc-widget--chat { background: rgba(10, 10, 10, 0.4) !important; backdrop-filter: blur(15px) !important; border-radius: 16px !important; }
-        .vfrc-header { background: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
-        
-        /* The Text Highlight Killer */
-        .vfrc-header h2, .vfrc-header span, .vfrc-header--title { color: #ffffff !important; font-weight: 600 !important; background: transparent !important; text-shadow: none !important; }
-        
-        .vfrc-message--assistant { background: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; color: #ffffff !important; }
+        /* Main Chat Elements */
+        .vfrc-widget--chat { background: rgba(10, 10, 10, 0.4) !important; backdrop-filter: blur(15px) !important; -webkit-backdrop-filter: blur(15px) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-radius: 16px !important; color: #ffffff !important; }
+        .vfrc-chat--canvas, .vfrc-chat, .vfrc-header { background: transparent !important; }
+        .vfrc-header { border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
+        .vfrc-message--assistant { background: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; backdrop-filter: blur(10px) !important; color: #ffffff !important; }
         .vfrc-message--user { background: rgba(66, 133, 244, 0.85) !important; color: #ffffff !important; }
-        .vfrc-chat-input { background: rgba(255, 255, 255, 0.05) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
         
-        .vfrc-footer { display: none !important; }
-        .vfrc-launcher { display: none !important; }
+        /* The Footnote Killer Update */
+        .vfrc-footer { background: transparent !important; border-top: none !important; }
+        .vfrc-footer--watermark { display: none !important; visibility: hidden !important; opacity: 0 !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
+        
+        /* THE DEFAULT LAUNCHER BUTTON KILLER */
+        .vfrc-launcher, .vfrc-widget--launcher, ::part(vfrc-launcher) {
+          display: none !important; 
+          visibility: hidden !important; 
+          opacity: 0 !important; 
+          pointer-events: none !important;
+        }
+
+        /* HEADER TEXT FIX */
+        .vfrc-header h2, .vfrc-header span, .vfrc-header--title, .vfrc-header--description { color: #ffffff !important; font-weight: 600 !important; }
+        
+        /* Inputs & Subtext */
+        .vfrc-chat-input { background: rgba(255, 255, 255, 0.05) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
+        .vfrc-chat-input::placeholder { color: rgba(255, 255, 255, 0.6) !important; }
+        .vfrc-system-response--content { color: rgba(255, 255, 255, 0.8) !important; }
+
+        /* --- IMMERSIVE MOBILE FULL-SCREEN CHAT --- */
+        @media (max-width: 768px) {
+            .vfrc-widget--chat {
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100% !important;
+                max-height: 100% !important;
+                border-radius: 0 !important;
+                border: none !important;
+                margin: 0 !important;
+                background: rgba(10, 10, 10, 0.85) !important; /* Slightly darker for mobile readability */
+            }
+        }
       `;
+
       const styleURI = "data:text/css;charset=utf-8," + encodeURIComponent(customTheme);
 
       (function(d, t) {
           var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
           v.onload = function() {
             window.voiceflow.chat.load({
-              verify: { projectID: '69aaba5d8affea8bdb31a4c6' },
+              verify: { projectID: '69aaba5d8affea8bdb31a4c6' }, 
               url: 'https://general-runtime.voiceflow.com',
               versionID: 'production',
-              launch: { custom: true },
-              assistant: { title: "Alfayez AI", stylesheet: styleURI }
+              launch: { custom: true }, 
+              assistant: {
+                title: "AI Assistant", 
+                description: "Ask me anything about his system architecture.",
+                stylesheet: styleURI 
+              }
             });
           }
           v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
