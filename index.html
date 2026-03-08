@@ -8,10 +8,10 @@
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            overflow-x: hidden; background-color: #0a0a0a; color: #fff; /* FIX 1: Allowed vertical scrolling */
+            overflow-x: hidden; background-color: #0a0a0a; color: #fff; 
         }
 
-        #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; } /* FIX 2: Locked background in place */
+        #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; } 
 
         /* --- NAVIGATION --- */
         nav {
@@ -34,19 +34,20 @@
 
         /* --- MAIN CONTENT --- */
         .page-container {
-            position: relative; top: 0; left: 0; width: 100%; min-height: 100vh; /* FIX 3: Removed absolute positioning */
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; /* FIX 4: Top-aligned for mobile */
+            position: relative; top: 0; left: 0; width: 100%; min-height: 100vh; 
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
             z-index: 1; pointer-events: none; padding-top: 120px; padding-bottom: 100px; box-sizing: border-box;
         }
 
         .section {
             position: absolute; opacity: 0; transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease;
             pointer-events: none; text-align: center; width: 100%; max-width: 900px;
+            display: none; /* FIX: Prevents invisible items from causing a scrollbar */
         }
         .section.active { 
             position: relative; opacity: 1; transform: translateY(0); pointer-events: auto; 
-            margin: auto 0; /* FIX 5: Centers content automatically when there is extra space on desktop */
+            margin: auto 0; display: block; /* FIX: Only active sections take up space */
         }
 
         h1 { font-size: 3.5rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
@@ -64,6 +65,15 @@
         .card:hover { transform: translateY(-5px); border-color: rgba(66, 133, 244, 0.5); }
         .card h3 { margin: 0 0 10px 0; color: #4285F4; font-size: 1.3rem; }
         .card p { margin: 0; font-size: 0.95rem; color: #a1a1aa; line-height: 1.5; }
+
+        /* --- INLINE TECH TAGS UI --- */
+        .tech-tags {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 20px;
+        }
+        .tech-tag {
+            background: rgba(66, 133, 244, 0.1); color: #8ab4f8; border: 1px solid rgba(66, 133, 244, 0.2);
+            padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px;
+        }
         
         /* Premium AI Chat Pill */
         #ai-chat-btn {
@@ -88,7 +98,6 @@
             nav { justify-content: flex-end; padding: 15px 20px; }
             .mobile-menu-btn { display: block; }
             
-            /* The Frosted Glass Dropdown */
             .nav-links {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
                 background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -99,7 +108,6 @@
             .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
             .nav-links a { font-size: 1.5rem; font-weight: 600; }
             
-            /* Shrink AI button to icon-only on mobile */
             #ai-chat-btn span { display: none; } 
             #ai-chat-btn { padding: 15px; border-radius: 50%; bottom: 20px; right: 20px; }
         }
@@ -122,7 +130,7 @@
     </nav>
 
     <div class="page-container">
-        <div id="home" class="section active">
+        <div id="home" class="section active" style="display: block;">
             <h1>Alfayez Ahmad</h1>
             <p class="subtitle">AI & Cloud Computing | Network Intrusion Detection & Autonomous Systems</p>
         </div>
@@ -134,24 +142,55 @@
                     <div class="card">
                         <h3>Sentinela NIDS</h3>
                         <p>AI-powered Network Intrusion Detection System implementation.</p>
-                    </div>
-                </a>
-                <a href="https://github.com/alfayezahmad/ideal-sniffle" target="_blank">
-                    <div class="card">
-                        <h3>Ideal-Sniffle</h3>
-                        <p>Machine learning air quality forecasting model tailored for Lucknow environmental data.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Python 3.10</span>
+                            <span class="tech-tag">Scapy</span>
+                            <span class="tech-tag">Scikit-learn</span>
+                            <span class="tech-tag">Pandas</span>
+                            <span class="tech-tag">Joblib</span>
+                            <span class="tech-tag">Rich</span>
+                        </div>
                     </div>
                 </a>
                 <a href="https://github.com/alfayezahmad/warehouse-vision-sam2" target="_blank">
                     <div class="card">
                         <h3>Warehouse Vision</h3>
                         <p>Autonomous warehouse simulation utilizing SAM2 tracking.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Python 3.10</span>
+                            <span class="tech-tag">PyTorch</span>
+                            <span class="tech-tag">Meta SAM 2</span>
+                            <span class="tech-tag">OpenCV</span>
+                            <span class="tech-tag">NumPy</span>
+                            <span class="tech-tag">PIL</span>
+                            <span class="tech-tag">SQLite</span>
+                            <span class="tech-tag">Pandas</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="https://github.com/alfayezahmad/ideal-sniffle" target="_blank">
+                    <div class="card">
+                        <h3>Ideal-Sniffle</h3>
+                        <p>Machine learning air quality forecasting model tailored for Lucknow environmental data.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Python 3.10</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">Scikit-Learn</span>
+                            <span class="tech-tag">Random Forest</span>
+                        </div>
                     </div>
                 </a>
                 <a href="https://github.com/alfayezahmad/Quadcopter-Sim-V1" target="_blank">
                     <div class="card">
                         <h3>Quadcopter Sim V1</h3>
                         <p>Modular UAV flight simulator stack.</p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Python 3.10</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">SITL</span>
+                            <span class="tech-tag">PID Control</span>
+                            <span class="tech-tag">Kalman Filter</span>
+                        </div>
                     </div>
                 </a>
             </div>
@@ -174,7 +213,7 @@
         <div id="contact" class="section">
             <h2>Get In Touch</h2>
             <div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
-                <p style="margin-bottom: 25px;">Open to collaborations regarding cloud infrastructure and AI systems.</p>
+                <p style="margin-bottom: 25px;">Let's connect! Always open to discussing cloud architecture, AI, and autonomous systems. Off the screen, you'll find me pacing my 10K runs, playing badminton, or casually dropping into 7-hour roller skating sessions. Send an email and let's talk tech (or track).</p>
                 <a href="mailto:alfayezahmad.aa@gmail.com" style="display: inline-block; padding: 12px 24px; background: #4285F4; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600;">Send an Email</a>
             </div>
         </div>
@@ -200,37 +239,53 @@
             size: 3.00, spacing: 35.00, showLines: false
         });
 
-        // Mobile Menu Toggle
         function toggleMenu() {
             document.getElementById('nav-links').classList.toggle('open');
         }
 
-        // Updated Navigation to auto-close menu on mobile
+        // --- NEW UPDATED NAVIGATION LOGIC ---
         function navigate(targetId) {
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            // 1. Immediately jump to the top of the new page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 2. Hide old sections
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
+                // Wait for the fade out, then completely remove it from the scroll calculation
+                setTimeout(() => {
+                    if (!sec.classList.contains('active')) {
+                        sec.style.display = 'none';
+                    }
+                }, 400); 
+            });
+
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-link'));
-            document.getElementById(targetId).classList.add('active');
-            document.getElementById('link-' + targetId).classList.add('active-link');
             
-            // Close mobile menu if open
+            // 3. Show new section
+            const targetSec = document.getElementById(targetId);
+            targetSec.style.display = 'block'; // Physically bring it back into the page
+            
+            // Wait a tiny fraction of a second so the browser registers the display block before fading it in
+            setTimeout(() => {
+                targetSec.classList.add('active');
+            }, 20);
+            
+            document.getElementById('link-' + targetId).classList.add('active-link');
             document.getElementById('nav-links').classList.remove('open');
         }
     </script>
 
     <script type="text/javascript">
       const customTheme = `
-        /* Main Chat Elements */
         .vfrc-widget--chat { background: rgba(10, 10, 10, 0.4) !important; backdrop-filter: blur(15px) !important; -webkit-backdrop-filter: blur(15px) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; border-radius: 16px !important; color: #ffffff !important; }
         .vfrc-chat--canvas, .vfrc-chat, .vfrc-header { background: transparent !important; }
         .vfrc-header { border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
         .vfrc-message--assistant { background: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; backdrop-filter: blur(10px) !important; color: #ffffff !important; }
         .vfrc-message--user { background: rgba(66, 133, 244, 0.85) !important; color: #ffffff !important; }
         
-        /* The Footnote Killer Update */
         .vfrc-footer { background: transparent !important; border-top: none !important; }
         .vfrc-footer--watermark { display: none !important; visibility: hidden !important; opacity: 0 !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
         
-        /* THE DEFAULT LAUNCHER BUTTON KILLER */
         .vfrc-launcher, .vfrc-widget--launcher, ::part(vfrc-launcher) {
           display: none !important; 
           visibility: hidden !important; 
@@ -238,29 +293,17 @@
           pointer-events: none !important;
         }
 
-        /* HEADER TEXT FIX */
         .vfrc-header h2, .vfrc-header span, .vfrc-header--title, .vfrc-header--description { color: #ffffff !important; font-weight: 600 !important; }
         
-        /* Inputs & Subtext */
         .vfrc-chat-input { background: rgba(255, 255, 255, 0.05) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
         .vfrc-chat-input::placeholder { color: rgba(255, 255, 255, 0.6) !important; }
         .vfrc-system-response--content { color: rgba(255, 255, 255, 0.8) !important; }
 
-        /* --- IMMERSIVE MOBILE FULL-SCREEN CHAT --- */
         @media (max-width: 768px) {
             .vfrc-widget--chat {
-                position: fixed !important;
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                bottom: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
-                max-width: 100% !important;
-                max-height: 100% !important;
-                border-radius: 0 !important;
-                border: none !important;
-                margin: 0 !important;
+                position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+                width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important;
+                border-radius: 0 !important; border: none !important; margin: 0 !important;
                 background: rgba(10, 10, 10, 0.85) !important;
             }
         }
