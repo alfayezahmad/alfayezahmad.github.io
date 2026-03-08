@@ -39,26 +39,83 @@
             z-index: 1; pointer-events: none; padding-top: 120px; padding-bottom: 100px; box-sizing: border-box;
         }
 
+        /* --- THE ORGANIC CASCADE ENGINE --- */
         .section {
-            position: absolute; opacity: 0; transform: translateY(20px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            pointer-events: none; text-align: center; width: 100%; max-width: 900px;
-            display: none; /* FIX: Prevents invisible items from causing a scrollbar */
+            display: none; 
+            opacity: 0; 
+            transition: opacity 0.6s ease;
+            text-align: center; width: 100%; max-width: 900px; margin: auto 0; 
         }
         .section.active { 
-            position: relative; opacity: 1; transform: translateY(0); pointer-events: auto; 
-            margin: auto 0; display: block; /* FIX: Only active sections take up space */
+            opacity: 1; pointer-events: auto;
         }
+
+        .section h1, .section p.subtitle, .section .hero-buttons, .section h2, .section .grid, .section > .card {
+            opacity: 0; 
+            transform: translateY(40px); 
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .section.active h1, .section.active p.subtitle, .section.active .hero-buttons, .section.active h2, .section.active .grid, .section.active > .card {
+            opacity: 1; 
+            transform: translateY(0);
+        }
+
+        .section.active h1 { transition-delay: 0.1s; }
+        .section.active p.subtitle { transition-delay: 0.3s; }
+        .section.active .hero-buttons { transition-delay: 0.5s; }
+        
+        .section.active h2 { transition-delay: 0.1s; }
+        .section.active .grid { transition-delay: 0.3s; }
+        .section.active > .card { transition-delay: 0.3s; }
 
         h1 { font-size: 3.5rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
         h2 { font-size: 2.5rem; font-weight: 600; margin-bottom: 40px; letter-spacing: -1px; color: #fff; }
-        p.subtitle { font-size: 1.2rem; color: #a1a1aa; line-height: 1.6; }
         
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; align-items: stretch; }
+        /* --- TYPEWRITER CSS --- */
+        p.subtitle { 
+            font-size: 1.2rem; color: #a1a1aa; line-height: 1.6; min-height: 30px; margin: 0 auto; max-width: 800px;
+        }
+        .typewriter::after {
+            content: '|';
+            animation: blink 1s step-end infinite;
+            color: #4285F4;
+            margin-left: 2px;
+        }
+        .typewriter.done::after {
+            display: none;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* --- TRANSLUCENT GLASS BUTTONS --- */
+        .hero-buttons {
+            display: flex; gap: 15px; justify-content: center; margin-top: 35px; flex-wrap: wrap;
+        }
+        .btn {
+            padding: 14px 32px; border-radius: 30px; font-size: 1rem; font-weight: 600; text-decoration: none;
+            display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; cursor: pointer; pointer-events: auto;
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Makes them physical glass */
+        }
+        .btn svg { margin-right: 8px; }
+        
+        .btn-primary { background: rgba(255, 255, 255, 0.9); color: #0a0a0a; border: 1px solid rgba(255, 255, 255, 0.5); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.15); background: #fff; }
+        
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .btn-secondary:hover { background: rgba(255, 255, 255, 0.18); border-color: #fff; transform: translateY(-3px); }
+
+        .btn-accent { background: rgba(66, 133, 244, 0.15); color: #8ab4f8; border: 1px solid rgba(66, 133, 244, 0.4); }
+        .btn-accent:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(66, 133, 244, 0.2); background: rgba(66, 133, 244, 0.25); color: #fff; }
+        
+        /* --- UNIFIED CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; align-items: stretch; margin-top: 20px; }
         .grid a { display: block; text-decoration: none; color: inherit; height: 100%; }
+        
         .card { 
-            background: rgba(255, 255, 255, 0.03); padding: 30px; border: 1px solid rgba(255,255,255,0.08); 
-            border-radius: 12px; backdrop-filter: blur(10px); text-align: left;
+            background: rgba(255, 255, 255, 0.05); /* Bumped from 0.03 for slightly better visibility */
+            padding: 30px; border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); text-align: left;
             transition: transform 0.3s ease, border-color 0.3s ease;
             height: 100%; box-sizing: border-box; display: flex; flex-direction: column;
         }
@@ -66,10 +123,7 @@
         .card h3 { margin: 0 0 10px 0; color: #4285F4; font-size: 1.3rem; }
         .card p { margin: 0; font-size: 0.95rem; color: #a1a1aa; line-height: 1.5; }
 
-        /* --- INLINE TECH TAGS UI --- */
-        .tech-tags {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 20px;
-        }
+        .tech-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 20px; }
         .tech-tag {
             background: rgba(66, 133, 244, 0.1); color: #8ab4f8; border: 1px solid rgba(66, 133, 244, 0.2);
             padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px;
@@ -95,19 +149,35 @@
             .grid { grid-template-columns: 1fr; }
             .section { width: 90%; }
             
-            nav { justify-content: flex-end; padding: 15px 20px; }
-            .mobile-menu-btn { display: block; }
+            nav { 
+                background: transparent; border-bottom: none; backdrop-filter: none; -webkit-backdrop-filter: none; 
+                padding: 20px 25px; justify-content: flex-end; pointer-events: none; 
+            }
+            
+            .mobile-menu-btn { 
+                display: flex; align-items: center; justify-content: center; pointer-events: auto; 
+                background: rgba(255, 255, 255, 0.04); /* Reduced opacity to stop it from "popping" */
+                border: 1px solid rgba(255, 255, 255, 0.1); 
+                backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
+                border-radius: 30px; padding: 10px 16px; color: rgba(255, 255, 255, 0.9); 
+                transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+            .mobile-menu-btn:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.08); }
             
             .nav-links {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
                 background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
                 flex-direction: column; align-items: center; justify-content: center;
-                gap: 35px; transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-                z-index: 40; opacity: 0; pointer-events: none;
+                gap: 35px; transform: translateY(-20px); 
+                transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease, visibility 0.6s;
+                z-index: 40; opacity: 0; pointer-events: none; visibility: hidden;
             }
-            .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+            .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; visibility: visible; }
             .nav-links a { font-size: 1.5rem; font-weight: 600; }
             
+            .hero-buttons { flex-direction: column; max-width: 250px; margin: 35px auto 0 auto; gap: 12px; }
+            .btn { width: 100%; box-sizing: border-box; }
+
             #ai-chat-btn span { display: none; } 
             #ai-chat-btn { padding: 15px; border-radius: 50%; bottom: 20px; right: 20px; }
         }
@@ -119,20 +189,33 @@
 
     <nav>
         <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Menu">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+            <svg width="22" height="16" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <line x1="2" y1="2" x2="22" y2="2"></line>
+                <line x1="2" y1="8" x2="22" y2="8"></line>
+                <line x1="2" y1="14" x2="22" y2="14"></line>
+            </svg>
         </button>
         <div class="nav-links" id="nav-links">
             <a onclick="navigate('home')" class="nav-link active-link" id="link-home">Home</a>
-            <a onclick="navigate('projects')" class="nav-link" id="link-projects">Featured Projects</a>
             <a onclick="navigate('research')" class="nav-link" id="link-research">Publications</a>
             <a onclick="navigate('contact')" class="nav-link" id="link-contact">Contact</a>
         </div>
     </nav>
 
     <div class="page-container">
-        <div id="home" class="section active" style="display: block;">
+        <div id="home" class="section">
             <h1>Alfayez Ahmad</h1>
-            <p class="subtitle">AI & Cloud Computing | Network Intrusion Detection & Autonomous Systems</p>
+            <p class="subtitle typewriter" id="typewriter-text"></p>
+            
+            <div class="hero-buttons">
+                <a href="resume.pdf" target="_blank" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    View Resume
+                </a>
+                <a onclick="navigate('projects')" class="btn btn-secondary">
+                    Explore Projects
+                </a>
+            </div>
         </div>
 
         <div id="projects" class="section">
@@ -212,9 +295,19 @@
 
         <div id="contact" class="section">
             <h2>Get In Touch</h2>
-            <div class="card" style="max-width: 500px; margin: 0 auto; text-align: center;">
-                <p style="margin-bottom: 25px;">Let's connect! Always open to discussing cloud architecture, AI, and autonomous systems. Off the screen, you'll find me pacing my 10K runs, playing badminton, or casually dropping into 7-hour roller skating sessions. Send an email and let's talk tech (or track).</p>
-                <a href="mailto:alfayezahmad.aa@gmail.com" style="display: inline-block; padding: 12px 24px; background: #4285F4; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600;">Send an Email</a>
+            <div class="card" style="max-width: 550px; margin: 0 auto; text-align: center;">
+                <p style="margin-bottom: 30px;">Let's connect! Always open to discussing cloud architecture, AI, and autonomous systems. Off the screen, you'll find me pacing my 10K runs, playing badminton, or casually dropping into 7-hour roller skating sessions. Send an email and let's talk tech (or track).</p>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:alfayezahmad.aa@gmail.com" class="btn btn-accent">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        Email Me
+                    </a>
+                    <a href="https://linkedin.com/in/alfayezahmad" target="_blank" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                        LinkedIn
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -239,38 +332,57 @@
             size: 3.00, spacing: 35.00, showLines: false
         });
 
+        const textToType = "Systems Developer & AI Researcher | Specializing in Applied ML & Autonomous Robotics";
+        const typingSpeed = 40; 
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < textToType.length) {
+                document.getElementById("typewriter-text").innerHTML += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, typingSpeed);
+            } else {
+                setTimeout(() => {
+                    document.getElementById("typewriter-text").classList.add("done");
+                }, 2500); 
+            }
+        }
+
+        window.onload = () => {
+            const homeSec = document.getElementById('home');
+            homeSec.style.display = 'block'; 
+            
+            void homeSec.offsetWidth;
+            
+            homeSec.classList.add('active'); 
+            
+            setTimeout(typeWriter, 1200); 
+        };
+
         function toggleMenu() {
             document.getElementById('nav-links').classList.toggle('open');
         }
 
-        // --- NEW UPDATED NAVIGATION LOGIC ---
         function navigate(targetId) {
-            // 1. Immediately jump to the top of the new page
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
 
-            // 2. Hide old sections
             document.querySelectorAll('.section').forEach(sec => {
                 sec.classList.remove('active');
-                // Wait for the fade out, then completely remove it from the scroll calculation
-                setTimeout(() => {
-                    if (!sec.classList.contains('active')) {
-                        sec.style.display = 'none';
-                    }
-                }, 400); 
+                sec.style.display = 'none';
             });
 
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-link'));
             
-            // 3. Show new section
             const targetSec = document.getElementById(targetId);
-            targetSec.style.display = 'block'; // Physically bring it back into the page
+            targetSec.style.display = 'block'; 
             
-            // Wait a tiny fraction of a second so the browser registers the display block before fading it in
-            setTimeout(() => {
-                targetSec.classList.add('active');
-            }, 20);
+            void targetSec.offsetWidth;
             
-            document.getElementById('link-' + targetId).classList.add('active-link');
+            targetSec.classList.add('active'); 
+            
+            const navLink = document.getElementById('link-' + targetId);
+            if(navLink) navLink.classList.add('active-link');
+            
             document.getElementById('nav-links').classList.remove('open');
         }
     </script>
@@ -321,7 +433,7 @@
               launch: { custom: true }, 
               assistant: {
                 title: "AI Assistant", 
-                description: "Ask me anything about his system architecture.",
+                description: "Ask me about his engineering portfolio.",
                 stylesheet: styleURI 
               }
             });
