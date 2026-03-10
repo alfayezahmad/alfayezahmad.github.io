@@ -11,7 +11,8 @@
             overflow-x: hidden; background-color: #0a0a0a; color: #fff; 
         }
 
-        #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; } 
+        #vanta-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; transition: opacity 0.5s ease; } 
+        #three-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.5s ease; }
 
         /* --- NAVIGATION --- */
         nav {
@@ -50,14 +51,14 @@
             opacity: 1; pointer-events: auto;
         }
 
-        .section h1, .section p.subtitle, .section .hero-buttons, .section h2, .section .grid, .section > .card {
+        .section h1, .section p.subtitle, .section .hero-buttons, .section h2, .section .grid, .section > .card, .section > .pg-wrapper {
             opacity: 0; 
             transform: translateY(40px); 
             transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity, transform;
         }
 
-        .section.active h1, .section.active p.subtitle, .section.active .hero-buttons, .section.active h2, .section.active .grid, .section.active > .card {
+        .section.active h1, .section.active p.subtitle, .section.active .hero-buttons, .section.active h2, .section.active .grid, .section.active > .card, .section.active > .pg-wrapper {
             opacity: 1; 
             transform: translateY(0);
         }
@@ -69,6 +70,7 @@
         .section.active h2 { transition-delay: 0.1s; }
         .section.active .grid { transition-delay: 0.3s; }
         .section.active > .card { transition-delay: 0.3s; }
+        .section.active > .pg-wrapper { transition-delay: 0.3s; }
 
         h1 { font-size: 3.5rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
         h2 { font-size: 2.5rem; font-weight: 600; margin-bottom: 40px; letter-spacing: -1px; color: #fff; }
@@ -95,7 +97,7 @@
         .btn {
             padding: 14px 32px; border-radius: 30px; font-size: 1rem; font-weight: 600; text-decoration: none;
             display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease; cursor: pointer; pointer-events: auto;
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Makes them physical glass */
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
         }
         .btn svg { margin-right: 8px; }
         
@@ -113,7 +115,7 @@
         .grid a { display: block; text-decoration: none; color: inherit; height: 100%; }
         
         .card { 
-            background: rgba(255, 255, 255, 0.05); /* Bumped from 0.03 for slightly better visibility */
+            background: rgba(255, 255, 255, 0.05);
             padding: 30px; border: 1px solid rgba(255,255,255,0.1); 
             border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); text-align: left;
             transition: transform 0.3s ease, border-color 0.3s ease;
@@ -128,6 +130,47 @@
             background: rgba(66, 133, 244, 0.1); color: #8ab4f8; border: 1px solid rgba(66, 133, 244, 0.2);
             padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.5px;
         }
+
+        /* --- PLAYGROUND CSS --- */
+        .pg-wrapper {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 0; overflow: hidden; position: relative; width: 100%; text-align: center; box-sizing: border-box;
+        }
+        .pg-controls { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; pointer-events: auto; flex-wrap: wrap; }
+        .pg-tab {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a1a1aa; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; cursor: pointer;
+            transition: all 0.3s ease; backdrop-filter: blur(10px); font-family: inherit; outline: none;
+        }
+        .pg-tab:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .pg-tab.active { background: rgba(255, 255, 255, 0.15); color: #fff; border-color: rgba(255, 255, 255, 0.4); }
+        
+        #pg-container {
+            width: 100%; aspect-ratio: 16/9; max-height: 450px; margin: 0 auto;
+            background: #000; position: relative; touch-action: none; pointer-events: auto; border: none;
+        }
+        .pg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; cursor: crosshair; }
+        .pg-canvas.active { display: block; }
+
+        #pg-hud {
+            position: absolute; bottom: 15px; left: 15px; right: 15px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            pointer-events: none; z-index: 10;
+        }
+        #pg-instructions {
+            background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.8); font-size: 0.75rem; font-family: monospace;
+            transition: color 0.3s ease;
+        }
+        #pg-reset-btn {
+            background: rgba(255, 95, 86, 0.15); color: #ff5f56; border: 1px solid rgba(255, 95, 86, 0.3);
+            padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
+            pointer-events: auto; transition: all 0.2s; backdrop-filter: blur(5px); font-family: monospace;
+            display: none; outline: none;
+        }
+        #pg-reset-btn:hover { background: rgba(255, 95, 86, 0.3); color: #fff; transform: translateY(-2px); }
         
         /* Premium AI Chat Pill */
         #ai-chat-btn {
@@ -156,7 +199,7 @@
             
             .mobile-menu-btn { 
                 display: flex; align-items: center; justify-content: center; pointer-events: auto; 
-                background: rgba(255, 255, 255, 0.04); /* Reduced opacity to stop it from "popping" */
+                background: rgba(255, 255, 255, 0.04); 
                 border: 1px solid rgba(255, 255, 255, 0.1); 
                 backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
                 border-radius: 30px; padding: 10px 16px; color: rgba(255, 255, 255, 0.9); 
@@ -178,6 +221,9 @@
             .hero-buttons { flex-direction: column; max-width: 250px; margin: 35px auto 0 auto; gap: 12px; }
             .btn { width: 100%; box-sizing: border-box; }
 
+            #pg-container { aspect-ratio: 4/3; }
+            #pg-hud { flex-direction: column; align-items: flex-start; gap: 10px; bottom: 10px; left: 10px; }
+
             #ai-chat-btn span { display: none; } 
             #ai-chat-btn { padding: 15px; border-radius: 50%; bottom: 20px; right: 20px; }
         }
@@ -185,6 +231,7 @@
 </head>
 <body>
 
+    <canvas id="three-canvas"></canvas>
     <div id="vanta-bg"></div>
 
     <nav>
@@ -197,6 +244,7 @@
         </button>
         <div class="nav-links" id="nav-links">
             <a onclick="navigate('home')" class="nav-link active-link" id="link-home">Home</a>
+            <a onclick="navigate('playground')" class="nav-link" id="link-playground">Playground</a>
             <a onclick="navigate('research')" class="nav-link" id="link-research">Publications</a>
             <a onclick="navigate('contact')" class="nav-link" id="link-contact">Contact</a>
         </div>
@@ -279,6 +327,28 @@
             </div>
         </div>
 
+        <div id="playground" class="section">
+            <h2>Interactive Algorithms</h2>
+            <p style="margin-bottom: 25px; color: #a1a1aa; font-size: 0.95rem;">Algorithms running locally via canvas.</p>
+            
+            <div class="pg-controls">
+                <button class="pg-tab active" onclick="switchVisualizer('rrt')">RRT* Pathfinding</button>
+                <button class="pg-tab" onclick="switchVisualizer('kmeans')">K-Means Clustering</button>
+            </div>
+
+            <div class="pg-wrapper">
+                <div id="pg-container">
+                    <canvas id="cvs-rrt" class="pg-canvas active"></canvas>
+                    <canvas id="cvs-kmeans" class="pg-canvas"></canvas>
+                    
+                    <div id="pg-hud">
+                        <div id="pg-instructions">Draw obstacles. Double-tap to set goal.</div>
+                        <button id="pg-reset-btn" onclick="resetRRT()" style="display: block;">[ CLEAR CANVAS ]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="research" class="section">
             <h2>Publications</h2>
             <div class="grid">
@@ -332,58 +402,341 @@
             size: 3.00, spacing: 35.00, showLines: false
         });
 
-        const textToType = "Systems Developer & AI Researcher | Specializing in Applied ML & Autonomous Robotics";
-        const typingSpeed = 40; 
-        let charIndex = 0;
+        // --- THREE.JS BACKGROUND (Playground Only) ---
+        const bgCanvas = document.getElementById('three-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
 
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+        for(let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 10;
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const material = new THREE.PointsMaterial({ size: 0.015, color: 0x4285F4, transparent: true, opacity: 0.8 });
+        const particlesMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particlesMesh);
+        camera.position.z = 3;
+
+        // Auto-rotation only. Disconnected mouse tracking entirely.
+        const clock = new THREE.Clock();
+        function animateBg() {
+            requestAnimationFrame(animateBg);
+            particlesMesh.rotation.y = clock.getElapsedTime() * 0.05;
+            renderer.render(scene, camera);
+        }
+        animateBg();
+
+        // --- PLAYGROUND LOGIC (RRT* & K-Means) ---
+        let activeVisualizer = 'rrt';
+        const pgContainer = document.getElementById('pg-container');
+        const instrText = document.getElementById('pg-instructions');
+        const resetBtn = document.getElementById('pg-reset-btn');
+        let pgW, pgH;
+
+        let kmeansData = { points: [], centroids: [] };
+        let rrtData = { nodes: [], targetFound: false, path: [], obstacles: [], start: {x:0, y:0}, goal: {x: 0, y: 0}, isDrawing: false, failed: false };
+
+        function initPlayground() {
+            const rect = pgContainer.getBoundingClientRect();
+            pgW = rect.width; pgH = rect.height;
+            document.querySelectorAll('.pg-canvas').forEach(cvs => { cvs.width = pgW; cvs.height = pgH; });
+            
+            kmeansData.points = Array.from({length: 150}, () => ({x: Math.random() * pgW, y: Math.random() * pgH}));
+            kmeansData.centroids = [
+                {x: pgW*0.3, y: pgH*0.3, color: '#4285F4', vx: 1, vy: 1.5},
+                {x: pgW*0.7, y: pgH*0.7, color: '#ff5f56', vx: -1.2, vy: -0.8},
+                {x: pgW*0.5, y: pgH*0.5, color: '#27c93f', isMouse: true}
+            ];
+
+            resetRRT();
+        }
+
+        function checkCollision(nx, ny) {
+            for(let obs of rrtData.obstacles) { if(Math.hypot(nx - obs.x, ny - obs.y) < obs.r) return true; }
+            return false;
+        }
+
+        function isValidPosition(x, y) {
+            if(Math.hypot(x - rrtData.start.x, y - rrtData.start.y) < 30) return false;
+            if(Math.hypot(x - rrtData.goal.x, y - rrtData.goal.y) < 30) return false;
+            return true;
+        }
+
+        function resetRRT() {
+            rrtData.start = {x: pgW * 0.1, y: pgH / 2};
+            rrtData.goal = {x: pgW * 0.9, y: pgH / 2};
+            rrtData.obstacles = [];
+            rrtData.nodes = [{x: rrtData.start.x, y: rrtData.start.y, parent: null}];
+            rrtData.targetFound = false;
+            rrtData.failed = false;
+            rrtData.path = [];
+        }
+
+        function setRRTGoal(pos) {
+            rrtData.obstacles = rrtData.obstacles.filter(obs => Math.hypot(obs.x - pos.x, obs.y - pos.y) > obs.r + 20);
+            rrtData.goal = {x: pos.x, y: pos.y};
+            rrtData.nodes = [{x: rrtData.start.x, y: rrtData.start.y, parent: null}];
+            rrtData.targetFound = false;
+            rrtData.failed = false;
+            rrtData.path = [];
+        }
+
+        function switchVisualizer(id) {
+            activeVisualizer = id;
+            document.querySelectorAll('.pg-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.pg-canvas').forEach(cvs => cvs.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('cvs-' + id).classList.add('active');
+            
+            if(id === 'rrt') {
+                instrText.innerText = "Draw obstacles. Double-tap to set goal.";
+                resetBtn.style.display = "block";
+            } else {
+                instrText.innerText = "Move mouse/finger to shift the green centroid.";
+                resetBtn.style.display = "none";
+            }
+            initPlayground();
+        }
+
+        const rrtCvs = document.getElementById('cvs-rrt');
+        function getPointerPos(e) {
+            const rect = rrtCvs.getBoundingClientRect();
+            if(e.touches && e.touches.length > 0) return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+            return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        }
+
+        function handlePointerDown(e) {
+            if(activeVisualizer !== 'rrt') return;
+            const pos = getPointerPos(e);
+            if (!isValidPosition(pos.x, pos.y)) return; 
+            rrtData.isDrawing = true;
+            rrtData.obstacles.push({x: pos.x, y: pos.y, r: 15});
+            rrtData.nodes = [{x: rrtData.start.x, y: rrtData.start.y, parent: null}];
+            rrtData.targetFound = false;
+            rrtData.failed = false;
+            rrtData.path = [];
+        }
+
+        function handlePointerMove(e) {
+            if(activeVisualizer !== 'rrt' || !rrtData.isDrawing) return;
+            if(e.cancelable) e.preventDefault(); 
+            const pos = getPointerPos(e);
+            if (!isValidPosition(pos.x, pos.y)) return; 
+            rrtData.obstacles.push({x: pos.x, y: pos.y, r: 15});
+        }
+
+        function handlePointerUp() { rrtData.isDrawing = false; }
+
+        rrtCvs.addEventListener('mousedown', handlePointerDown);
+        rrtCvs.addEventListener('mousemove', handlePointerMove);
+        rrtCvs.addEventListener('mouseup', handlePointerUp);
+        rrtCvs.addEventListener('mouseleave', handlePointerUp);
+        rrtCvs.addEventListener('dblclick', (e) => { if(activeVisualizer === 'rrt') setRRTGoal(getPointerPos(e)); });
+
+        rrtCvs.addEventListener('touchstart', handlePointerDown, {passive: false});
+        rrtCvs.addEventListener('touchmove', handlePointerMove, {passive: false});
+        rrtCvs.addEventListener('touchend', handlePointerUp);
+        
+        let lastTap = 0; let lastTapPos = {x:0, y:0};
+        rrtCvs.addEventListener('touchstart', (e) => {
+            let currentTime = new Date().getTime();
+            let tapLength = currentTime - lastTap;
+            lastTapPos = getPointerPos(e);
+            if (tapLength < 500 && tapLength > 0) {
+                if(activeVisualizer === 'rrt') setRRTGoal(lastTapPos);
+                e.preventDefault();
+            }
+            lastTap = currentTime;
+        }, {passive: false});
+
+        let kmeansMouse = {x:0, y:0};
+        const kmCvs = document.getElementById('cvs-kmeans');
+        function trackKMeans(e) {
+            const rect = kmCvs.getBoundingClientRect();
+            if(e.touches && e.touches.length > 0) {
+                kmeansMouse = { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+                if(e.cancelable) e.preventDefault();
+            } else { 
+                kmeansMouse = { x: e.clientX - rect.left, y: e.clientY - rect.top }; 
+            }
+        }
+        kmCvs.addEventListener('mousemove', trackKMeans);
+        kmCvs.addEventListener('touchmove', trackKMeans, {passive: false});
+
+        function renderRRT() {
+            const ctx = document.getElementById('cvs-rrt').getContext('2d');
+            ctx.fillStyle = '#000'; ctx.fillRect(0, 0, pgW, pgH);
+
+            ctx.fillStyle = 'rgba(255, 95, 86, 0.6)'; 
+            rrtData.obstacles.forEach(obs => { ctx.beginPath(); ctx.arc(obs.x, obs.y, obs.r, 0, Math.PI*2); ctx.fill(); });
+
+            ctx.fillStyle = '#4285F4'; ctx.shadowBlur = 15; ctx.shadowColor = '#4285F4';
+            ctx.beginPath(); ctx.arc(rrtData.start.x, rrtData.start.y, 8, 0, Math.PI*2); ctx.fill();
+            ctx.shadowBlur = 0; ctx.fillStyle = '#fff'; ctx.font = '10px monospace';
+            ctx.fillText("START", rrtData.start.x - 15, rrtData.start.y - 15);
+
+            ctx.fillStyle = rrtData.failed ? '#ff5f56' : '#ffbd2e'; ctx.shadowBlur = 15; ctx.shadowColor = rrtData.failed ? '#ff5f56' : '#ffbd2e';
+            ctx.beginPath(); ctx.arc(rrtData.goal.x, rrtData.goal.y, 8, 0, Math.PI*2); ctx.fill();
+            ctx.shadowBlur = 0; ctx.fillStyle = '#fff'; ctx.font = '10px monospace';
+            ctx.fillText("GOAL", rrtData.goal.x - 12, rrtData.goal.y - 15);
+
+            ctx.strokeStyle = rrtData.failed ? 'rgba(255, 95, 86, 0.3)' : 'rgba(66, 133, 244, 0.5)'; ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 1; i < rrtData.nodes.length; i++) {
+                const n = rrtData.nodes[i];
+                if (n.parent) { ctx.moveTo(n.parent.x, n.parent.y); ctx.lineTo(n.x, n.y); }
+            }
+            ctx.stroke();
+
+            if (rrtData.failed) {
+                ctx.fillStyle = '#ff5f56'; ctx.font = '12px monospace';
+                ctx.fillText("TIMEOUT: Path Unreachable", 15, 30);
+                return; 
+            }
+
+            if (rrtData.targetFound) {
+                ctx.strokeStyle = '#27c93f'; ctx.lineWidth = 4;
+                ctx.beginPath();
+                for(let i=0; i<rrtData.path.length-1; i++) {
+                    ctx.moveTo(rrtData.path[i].x, rrtData.path[i].y);
+                    ctx.lineTo(rrtData.path[i+1].x, rrtData.path[i+1].y);
+                }
+                ctx.stroke();
+                
+                ctx.fillStyle = '#27c93f'; ctx.font = '12px monospace';
+                ctx.fillText("PATH OPTIMIZED", 15, 30);
+                return; 
+            }
+
+            if (rrtData.nodes.length > 2000) { rrtData.failed = true; return; }
+
+            for(let step=0; step<15; step++) { 
+                const target = Math.random() < 0.4 ? {x: rrtData.goal.x, y: rrtData.goal.y} : {x: Math.random()*pgW, y: Math.random()*pgH};
+                let nearest = rrtData.nodes[0]; let minDist = Math.hypot(nearest.x - target.x, nearest.y - target.y);
+                
+                for(let i=1; i<rrtData.nodes.length; i++) {
+                    const d = Math.hypot(rrtData.nodes[i].x - target.x, rrtData.nodes[i].y - target.y);
+                    if(d < minDist) { minDist = d; nearest = rrtData.nodes[i]; }
+                }
+
+                const stepSize = 12; const angle = Math.atan2(target.y - nearest.y, target.x - nearest.x);
+                const newNode = {
+                    x: nearest.x + Math.cos(angle) * Math.min(stepSize, minDist),
+                    y: nearest.y + Math.sin(angle) * Math.min(stepSize, minDist), parent: nearest
+                };
+                
+                if(!checkCollision(newNode.x, newNode.y)) {
+                    rrtData.nodes.push(newNode);
+                    if(Math.hypot(newNode.x - rrtData.goal.x, newNode.y - rrtData.goal.y) < 15) {
+                        rrtData.targetFound = true; let curr = newNode;
+                        while(curr != null) { rrtData.path.push(curr); curr = curr.parent; }
+                        break;
+                    }
+                }
+            }
+        }
+
+        function renderKMeans() {
+            const ctx = document.getElementById('cvs-kmeans').getContext('2d');
+            ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fillRect(0, 0, pgW, pgH);
+
+            kmeansData.centroids.forEach(c => {
+                if(c.isMouse) { c.x = kmeansMouse.x || pgW/2; c.y = kmeansMouse.y || pgH/2; }
+                else {
+                    c.x += c.vx; c.y += c.vy;
+                    if(c.x < 0 || c.x > pgW) c.vx *= -1;
+                    if(c.y < 0 || c.y > pgH) c.vy *= -1;
+                }
+            });
+
+            kmeansData.points.forEach(p => {
+                let minDist = Infinity; let closestC = null;
+                kmeansData.centroids.forEach(c => {
+                    const d = Math.hypot(p.x - c.x, p.y - c.y);
+                    if(d < minDist) { minDist = d; closestC = c; }
+                });
+                
+                ctx.strokeStyle = closestC.color; ctx.globalAlpha = 0.2;
+                ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(closestC.x, closestC.y); ctx.stroke();
+                ctx.fillStyle = closestC.color; ctx.globalAlpha = 1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+            });
+
+            kmeansData.centroids.forEach(c => {
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(c.x, c.y, 6, 0, Math.PI*2); ctx.fill();
+                ctx.strokeStyle = '#000'; ctx.stroke();
+            });
+        }
+
+        function animatePlayground() {
+            if(document.getElementById('playground').classList.contains('active')) {
+                if(activeVisualizer === 'rrt') renderRRT();
+                else if(activeVisualizer === 'kmeans') renderKMeans();
+            }
+            requestAnimationFrame(animatePlayground);
+        }
+
+        window.addEventListener('resize', () => { 
+            camera.aspect = window.innerWidth / window.innerHeight; 
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            if(document.getElementById('playground').classList.contains('active')) initPlayground(); 
+        });
+        
+        const textToType = "Systems Developer & AI Researcher | Specializing in Applied ML & Autonomous Robotics";
+        const typingSpeed = 40; let charIndex = 0;
+        
         function typeWriter() {
             if (charIndex < textToType.length) {
                 document.getElementById("typewriter-text").innerHTML += textToType.charAt(charIndex);
-                charIndex++;
-                setTimeout(typeWriter, typingSpeed);
-            } else {
-                setTimeout(() => {
-                    document.getElementById("typewriter-text").classList.add("done");
-                }, 2500); 
-            }
+                charIndex++; setTimeout(typeWriter, typingSpeed);
+            } else { setTimeout(() => { document.getElementById("typewriter-text").classList.add("done"); }, 2500); }
         }
 
         window.onload = () => {
             const homeSec = document.getElementById('home');
-            homeSec.style.display = 'block'; 
-            
-            void homeSec.offsetWidth;
-            
-            homeSec.classList.add('active'); 
-            
-            setTimeout(typeWriter, 1200); 
+            homeSec.style.display = 'block'; void homeSec.offsetWidth;
+            homeSec.classList.add('active'); setTimeout(typeWriter, 1200); 
+            setTimeout(() => { initPlayground(); animatePlayground(); }, 500);
         };
 
-        function toggleMenu() {
-            document.getElementById('nav-links').classList.toggle('open');
-        }
+        function toggleMenu() { document.getElementById('nav-links').classList.toggle('open'); }
 
         function navigate(targetId) {
             window.scrollTo({ top: 0, behavior: 'instant' });
 
             document.querySelectorAll('.section').forEach(sec => {
-                sec.classList.remove('active');
-                sec.style.display = 'none';
+                sec.classList.remove('active'); sec.style.display = 'none';
             });
 
             document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-link'));
             
             const targetSec = document.getElementById(targetId);
-            targetSec.style.display = 'block'; 
-            
-            void targetSec.offsetWidth;
-            
+            targetSec.style.display = 'block'; void targetSec.offsetWidth;
             targetSec.classList.add('active'); 
             
             const navLink = document.getElementById('link-' + targetId);
             if(navLink) navLink.classList.add('active-link');
             
             document.getElementById('nav-links').classList.remove('open');
+
+            // --- BACKGROUND TOGGLE ---
+            const vantaBg = document.getElementById('vanta-bg');
+            const threeCanvas = document.getElementById('three-canvas');
+            if (targetId === 'playground') {
+                if(vantaBg) vantaBg.style.opacity = '0';
+                if(threeCanvas) {
+                    threeCanvas.style.opacity = '1';
+                    initPlayground();
+                }
+            } else {
+                if(vantaBg) vantaBg.style.opacity = '1';
+                if(threeCanvas) threeCanvas.style.opacity = '0';
+            }
         }
     </script>
 
@@ -394,19 +747,10 @@
         .vfrc-header { border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important; }
         .vfrc-message--assistant { background: rgba(255, 255, 255, 0.03) !important; border: 1px solid rgba(255, 255, 255, 0.08) !important; backdrop-filter: blur(10px) !important; color: #ffffff !important; }
         .vfrc-message--user { background: rgba(66, 133, 244, 0.85) !important; color: #ffffff !important; }
-        
         .vfrc-footer { background: transparent !important; border-top: none !important; }
         .vfrc-footer--watermark { display: none !important; visibility: hidden !important; opacity: 0 !important; height: 0 !important; margin: 0 !important; padding: 0 !important; }
-        
-        .vfrc-launcher, .vfrc-widget--launcher, ::part(vfrc-launcher) {
-          display: none !important; 
-          visibility: hidden !important; 
-          opacity: 0 !important; 
-          pointer-events: none !important;
-        }
-
+        .vfrc-launcher, .vfrc-widget--launcher, ::part(vfrc-launcher) { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
         .vfrc-header h2, .vfrc-header span, .vfrc-header--title, .vfrc-header--description { color: #ffffff !important; font-weight: 600 !important; }
-        
         .vfrc-chat-input { background: rgba(255, 255, 255, 0.05) !important; color: #ffffff !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; }
         .vfrc-chat-input::placeholder { color: rgba(255, 255, 255, 0.6) !important; }
         .vfrc-system-response--content { color: rgba(255, 255, 255, 0.8) !important; }
@@ -415,8 +759,7 @@
             .vfrc-widget--chat {
                 position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
                 width: 100% !important; height: 100% !important; max-width: 100% !important; max-height: 100% !important;
-                border-radius: 0 !important; border: none !important; margin: 0 !important;
-                background: rgba(10, 10, 10, 0.85) !important;
+                border-radius: 0 !important; border: none !important; margin: 0 !important; background: rgba(10, 10, 10, 0.85) !important;
             }
         }
       `;
@@ -429,13 +772,8 @@
             window.voiceflow.chat.load({
               verify: { projectID: '69aaba5d8affea8bdb31a4c6' }, 
               url: 'https://general-runtime.voiceflow.com',
-              versionID: 'production',
-              launch: { custom: true }, 
-              assistant: {
-                title: "AI Assistant", 
-                description: "Ask me about his engineering portfolio.",
-                stylesheet: styleURI 
-              }
+              versionID: 'production', launch: { custom: true }, 
+              assistant: { title: "AI Assistant", description: "Ask me about his engineering portfolio.", stylesheet: styleURI }
             });
           }
           v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
