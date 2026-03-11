@@ -51,14 +51,14 @@
             opacity: 1; pointer-events: auto;
         }
 
-        .section h1, .section p.subtitle, .section .hero-buttons, .section h2, .section .grid, .section > .card, .section > .pg-wrapper {
+        .section h1, .section p.subtitle, .section .hero-buttons, .section h2, .section .grid, .section > .card, .section > .pg-wrapper, .section > #pg-footer {
             opacity: 0; 
             transform: translateY(40px); 
             transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity, transform;
         }
 
-        .section.active h1, .section.active p.subtitle, .section.active .hero-buttons, .section.active h2, .section.active .grid, .section.active > .card, .section.active > .pg-wrapper {
+        .section.active h1, .section.active p.subtitle, .section.active .hero-buttons, .section.active h2, .section.active .grid, .section.active > .card, .section.active > .pg-wrapper, .section.active > #pg-footer {
             opacity: 1; 
             transform: translateY(0);
         }
@@ -71,6 +71,7 @@
         .section.active .grid { transition-delay: 0.3s; }
         .section.active > .card { transition-delay: 0.3s; }
         .section.active > .pg-wrapper { transition-delay: 0.3s; }
+        .section.active > #pg-footer { transition-delay: 0.4s; }
 
         h1 { font-size: 3.5rem; font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
         h2 { font-size: 2.5rem; font-weight: 600; margin-bottom: 40px; letter-spacing: -1px; color: #fff; }
@@ -153,22 +154,20 @@
         .pg-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; cursor: crosshair; }
         .pg-canvas.active { display: block; }
 
-        #pg-hud {
-            position: absolute; bottom: 15px; left: 15px; right: 15px;
-            display: flex; justify-content: space-between; align-items: flex-end;
-            pointer-events: none; z-index: 10;
+        /* --- NEW FOOTER CSS --- */
+        #pg-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 15px; width: 100%; box-sizing: border-box; padding: 0 5px;
         }
         #pg-instructions {
-            background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-            padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);
-            color: rgba(255,255,255,0.8); font-size: 0.75rem; font-family: monospace;
-            transition: color 0.3s ease;
+            color: #a1a1aa; font-size: 0.8rem; font-family: monospace;
+            letter-spacing: 0.5px; transition: color 0.3s ease; text-align: left;
         }
         #pg-reset-btn {
             background: rgba(255, 95, 86, 0.15); color: #ff5f56; border: 1px solid rgba(255, 95, 86, 0.3);
             padding: 8px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; cursor: pointer;
-            pointer-events: auto; transition: all 0.2s; backdrop-filter: blur(5px); font-family: monospace;
-            display: none; outline: none;
+            transition: all 0.2s; backdrop-filter: blur(5px); font-family: monospace;
+            display: none; outline: none; margin-left: auto; pointer-events: auto;
         }
         #pg-reset-btn:hover { background: rgba(255, 95, 86, 0.3); color: #fff; transform: translateY(-2px); }
         
@@ -222,7 +221,11 @@
             .btn { width: 100%; box-sizing: border-box; }
 
             #pg-container { aspect-ratio: 4/3; }
-            #pg-hud { flex-direction: column; align-items: flex-start; gap: 10px; bottom: 10px; left: 10px; }
+            
+            /* Responsive Footer adjustments */
+            #pg-footer { flex-direction: column; gap: 15px; justify-content: center; align-items: center; margin-top: 20px; }
+            #pg-instructions { text-align: center; width: 100%; font-size: 0.75rem; }
+            #pg-reset-btn { margin: 0 auto; }
 
             #ai-chat-btn span { display: none; } 
             #ai-chat-btn { padding: 15px; border-radius: 50%; bottom: 20px; right: 20px; }
@@ -340,12 +343,12 @@
                 <div id="pg-container">
                     <canvas id="cvs-rrt" class="pg-canvas active"></canvas>
                     <canvas id="cvs-kmeans" class="pg-canvas"></canvas>
-                    
-                    <div id="pg-hud">
-                        <div id="pg-instructions">Draw obstacles. Double-tap to set goal.</div>
-                        <button id="pg-reset-btn" onclick="resetRRT()" style="display: block;">[ CLEAR CANVAS ]</button>
-                    </div>
                 </div>
+            </div>
+            
+            <div id="pg-footer">
+                <div id="pg-instructions">Draw obstacles. Double-tap to set goal.</div>
+                <button id="pg-reset-btn" onclick="resetRRT()" style="display: block;">[ CLEAR CANVAS ]</button>
             </div>
         </div>
 
@@ -512,6 +515,7 @@
         function handlePointerDown(e) {
             if(activeVisualizer !== 'rrt') return;
             const pos = getPointerPos(e);
+            
             if (!isValidPosition(pos.x, pos.y)) return; 
             rrtData.isDrawing = true;
             rrtData.obstacles.push({x: pos.x, y: pos.y, r: 15});
@@ -525,6 +529,7 @@
             if(activeVisualizer !== 'rrt' || !rrtData.isDrawing) return;
             if(e.cancelable) e.preventDefault(); 
             const pos = getPointerPos(e);
+            
             if (!isValidPosition(pos.x, pos.y)) return; 
             rrtData.obstacles.push({x: pos.x, y: pos.y, r: 15});
         }
